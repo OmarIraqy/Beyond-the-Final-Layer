@@ -1,0 +1,5 @@
+# ResNet-50 backbone override
+backbone:
+  name: resnet50
+  pretrained: true
+  drop_path_rate: 0.0

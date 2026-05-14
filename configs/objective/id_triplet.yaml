@@ -1,0 +1,11 @@
+# ID + Triplet objective preset (default baseline)
+objectives:
+  - name: id_loss
+    type: cross_entropy
+    weight: 1.0
+    label_smooth: 0.1
+  - name: triplet_loss
+    type: triplet
+    weight: 1.0
+    margin: 0.3
+    hard_mining: true

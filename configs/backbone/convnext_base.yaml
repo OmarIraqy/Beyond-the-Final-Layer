@@ -1,0 +1,5 @@
+# ConvNeXt-Base backbone override
+backbone:
+  name: convnext_base
+  pretrained: true
+  drop_path_rate: 0.1

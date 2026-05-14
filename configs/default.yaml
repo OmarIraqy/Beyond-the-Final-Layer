@@ -1,0 +1,120 @@
+# Default config for Urban ReID Modular
+# This file defines ALL configurable parameters with sensible defaults.
+# Override specific values via experiment config files or CLI: key=value
+
+dataset:
+  root: /scratch/dr/Urban-ReID/Combined_dataset
+  train_csv: train.csv
+  train_classes_csv: train_classes.csv
+  query_csv: query.csv
+  query_classes_csv: query_classes.csv
+  test_csv: test.csv
+  test_classes_csv: test_classes.csv
+  val_query_csv: val_query.csv
+  val_test_csv: val_test.csv
+  val_query_classes_csv: val_query_classes.csv
+  val_test_classes_csv: val_test_classes.csv
+  num_obj_classes: 4
+
+input:
+  size_train: [256, 128]
+  size_test: [256, 128]
+  resize_strategy: fixed
+  keep_aspect_ratio: true
+  pad_value: mean
+  class_sizes_train:
+    Container: [256, 128]
+    Crosswalk: [256, 128]
+    RubbishBins: [256, 128]
+    TrafficSign: [256, 128]
+  class_sizes_test:
+    Container: [256, 128]
+    Crosswalk: [256, 128]
+    RubbishBins: [256, 128]
+    TrafficSign: [256, 128]
+  return_masks: false
+  patch_mask_stride: 16
+  pixel_mean: [0.5, 0.5, 0.5]
+  pixel_std: [0.5, 0.5, 0.5]
+  random_flip: true
+  random_erasing: true
+  re_prob: 0.5
+  pad: 10
+  random_crop: true
+  autoaug: false
+  color_jitter: false
+  cj_brightness: 0.2
+  cj_contrast: 0.15
+  cj_saturation: 0.15
+  cj_hue: 0.05
+
+dataloader:
+  batch_size: 64
+  num_workers: 8
+  sampler: pk
+  batching_strategy: standard
+  num_instances: 4
+  pin_memory: true
+
+backbone:
+  name: resnet50
+  pretrained: true
+  drop_path_rate: 0.1
+  freeze_percent: 0.0   # fraction of backbone blocks to freeze (0.0=none, 0.5=half, 1.0=all)
+  patch_stride: null    # optional [stride_h, stride_w] for overlapping ViT/EVA patch extraction
+  extra_kwargs: {}
+
+head:
+  type: bnneck
+  embed_dim: null
+  neck_feat: after
+
+objectives:
+  - name: id_loss
+    type: cross_entropy
+    weight: 1.0
+    label_smooth: 0.1
+  - name: triplet_loss
+    type: triplet
+    weight: 1.0
+    margin: 0.3
+    hard_mining: true
+
+solver:
+  optimizer: adamw
+  lr: 1e-4
+  weight_decay: 0.01
+  momentum: 0.9
+  max_epochs: 120
+  warmup_epochs: 5
+  warmup_lr: 1.0e-6
+  scheduler: cosine
+  step_milestones: [40, 70]
+  gamma: 0.1
+  amp: true
+  grad_accum_steps: 1
+  clip_grad_norm: null
+
+trainer:
+  eval_period: 1
+  checkpoint_period: 1
+  log_period: 5
+  output_dir: ./outputs
+  seed: 42
+  resume: null
+  eval_train_map: true  # set true to monitor train mAP as an overfitting indicator
+
+test:
+  batch_size: 64
+  weight: ""
+  feat_norm: true
+  flip_test: false
+  rerank: true
+  rerank_k1: 20
+  rerank_k2: 6
+  rerank_lambda: 0.3
+  class_mask: false
+
+submission:
+  top_k: 100
+  output_path: ./submission.csv

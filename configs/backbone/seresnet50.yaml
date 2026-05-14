@@ -1,0 +1,5 @@
+# SEResNet-50 backbone override
+backbone:
+  name: seresnet50.a2_in1k
+  pretrained: true
+  drop_path_rate: 0.0

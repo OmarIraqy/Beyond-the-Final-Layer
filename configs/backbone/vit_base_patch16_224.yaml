@@ -1,0 +1,9 @@
+# ViT-Base backbone override
+backbone:
+  name: vit_base_patch16_224
+  pretrained: true
+  drop_path_rate: 0.1
+
+input:
+  size_train: [224, 224]
+  size_test: [224, 224]
