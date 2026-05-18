@@ -81,13 +81,13 @@ Once training completes, generate the competition submission CSV using the check
 
 ```bash
 python tools/submit.py \
-  --config outputs/vit_large_dinov3_multilayer/config.yaml \
+  --config configs/expirements/vit_large_dinov3_multilayer.yaml \
   test.weight=outputs/vit_large_dinov3_multilayer/checkpoint_ep80.pth
 ```
 Or you can use the Checkpoint we provide at the following link:
 - [Model Weights](https://drive.google.com/file/d/1XoH1TrwkfMLlP69uKyxFb2AEcKhoog7E/view?usp=sharing)
 ```bash
 python tools/submit.py \
-  --config outputs/vit_large_dinov3_multilayer/config.yaml \
+  --config configs/expirements/vit_large_dinov3_multilayer.yaml \
   test.weight=./model_checkpoint.pth
 ```
