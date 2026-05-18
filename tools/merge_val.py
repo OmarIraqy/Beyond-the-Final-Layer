@@ -12,6 +12,7 @@ def setup_paths():
     paths = {
         'dataset_root': dataset_root,
         'train_csv': os.path.join(dataset_root, "train_classes.csv"),
+        'train_csv_alt': os.path.join(dataset_root, "train.csv"),
         'query_csv': os.path.join(dataset_root, "val_query_classes.csv"),
         'gallery_csv': os.path.join(dataset_root, "val_test_classes.csv"),
         'train_img_dir': os.path.join(dataset_root, "image_train"),
@@ -203,8 +204,9 @@ def save_combined_data(combined_df, train_df, query_df_prepared, gallery_df_prep
     print("\nSaving combined data...")
     
     train_csv_path = paths['train_csv']
+    train_csv_alt_path = paths['train_csv_alt']
     
-    # Create backup of original train.csv
+    # Create backup of original train_classes.csv
     backup_path = train_csv_path + ".backup"
     if not os.path.exists(backup_path):
         shutil.copy2(train_csv_path, backup_path)
@@ -212,14 +214,20 @@ def save_combined_data(combined_df, train_df, query_df_prepared, gallery_df_prep
     else:
         print(f"Backup already exists: {backup_path}")
     
-    # Save combined dataframe to original path
+    # Create backup of original train.csv
+    backup_alt_path = train_csv_alt_path + ".backup"
+    if not os.path.exists(backup_alt_path):
+        shutil.copy2(train_csv_alt_path, backup_alt_path)
+        print(f"✓ Backup created: {backup_alt_path}")
+    else:
+        print(f"Backup already exists: {backup_alt_path}")
+    
+    # Save combined dataframe to both paths
     combined_df.to_csv(train_csv_path, index=False)
     print(f"✓ Combined training CSV saved to: {train_csv_path}")
     
-    # Save to additional reference file
-    output_combined_path = train_csv_path.replace('.csv', '_with_val.csv')
-    combined_df.to_csv(output_combined_path, index=False)
-    print(f"✓ Also saved to: {output_combined_path}")
+    combined_df.to_csv(train_csv_alt_path, index=False)
+    print(f"✓ Combined training CSV saved to: {train_csv_alt_path}")
     
     # Print summary statistics
     print(f"\n" + "="*60)

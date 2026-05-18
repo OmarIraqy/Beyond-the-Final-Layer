@@ -1,5 +1,5 @@
 dataset:
-  root: /scratch/dr/Urban-ReID/full_train_no_val
+  root: Combined_dataset
   train_csv: train.csv
   train_classes_csv: train_classes.csv
   query_csv: query.csv
